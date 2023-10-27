@@ -1,86 +1,55 @@
 const User = require('./User')
-class ScooterApp {
-  constructor() {
-    this.stations = {};
-    this.registeredUsers = {};
-  }
 
-  createScooter(station) {
-    if (!this.stations[station]) {
-      throw new Error('No such station');
+class scooterApp{
+    condstructor(){
+        this.stations = {}
+        this.registeredUsers = {}    
     }
-    const scooter = new Scooter(Object.keys(this.stations[station]).length + 1);
-    scooter.station = station;
-    this.stations[station].push(scooter);
-    console.log(`Created new scooter.`);
-    return scooter;
-  }
-
-  dockScooter(scooter, station) {
-    if (!this.stations[station]) {
-      throw new Error('No such station');
+    registerUser(username, password, age){
+        if (this.registerUser[username]){
+            throw new Error("already registered")
+        }if (age<18){
+            throw new Error("too young to register")
+        }
+        this.registeredUsers[username] = new User(username, password, age)
+        console.log("User has been registered.")
+        return (this.registeredUsers[username])
     }
-
-    if (scooter.station === station) {
-      throw new Error('Scooter already at station');
+    loginUser(username, password){
+        if (this.registerUser[username]){
+            if ((this.registerUser[username]).login(password)){
+                console.log("user has been logged in")
+            }
+        }
+        throw new Error("Username or password is incorrect")
     }
-
-    scooter.station = station;
-    this.stations[station].push(scooter);
-    console.log(`Scooter is docked.`);
-  }
-
-  rentScooter(scooter, user) {
-    if (scooter.isRented) {
-      throw new Error('Scooter already rented');
+    logoutUser(username){
+       if(!this.registerUser[username]){
+        throw new Error("No user named "+username+" exists")
+       } 
+       (this.registerUser[username]).logout(username)
     }
-
-    if (!this.stations[scooter.station]) {
-      throw new Error('No such station');
+    createScooter(station){
+        if (!this.stations[stations]){
+            throw  new Error("no such station error")
+        }
+        scooter = new Scooter(station)
+        this.stations = station
+        console.log("Created new scooter.")
+        return scooter
     }
-
-    scooter.isRented = true;
-    console.log(`Scooter is rented.`);
-  }
-
-  registerUser(username, password, age) {
-    if (this.registeredUsers[username]) {
-      throw new Error('User is already registered.');
+    dockScooter(scooter, station){
+        if (!this.stations[stations]){
+            throw  new Error("no such station error")
+        }if(scooter.station === station){
+            throw new Error("scooter is alredy at "+ station)
+        }
+        scooter.station = station
+        console.log("scooter is docked")
     }
-
-    if (age < 18) {
-      throw new Error('Too young to register.');
+    rentScooter(scooter, user){
+        
     }
-
-    this.registeredUsers[username] = new User(username, password, age);
-    console.log(`User has been registered.`);
-    return this.registeredUsers[username];
-  }
-
-  loginUser(username, password) {
-    if (!this.registeredUsers[username]) {
-      throw new Error('Username or password is incorrect.');
-    }
-
-    this.registeredUsers[username].login(password);
-    console.log(`User has been logged in.`);
-  }
-
-  logoutUser(username) {
-    if (!this.registeredUsers[username]) {
-      throw new Error('No such user is logged in.');
-    }
-
-    this.registeredUsers[username].logout();
-    console.log(`User is logged out.`);
-  }
-
-  print() {
-    console.log('Stations:');
-    console.log(this.stations);
-    console.log('Registered Users:');
-    console.log(this.registeredUsers);
-  }
 }
 
-
+module.exports = ScooterApp;
